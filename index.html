@@ -9,7 +9,7 @@
 <body>
     <header id="header">Steam Authenticator</header>
     <div class="container">
-        <label for="fileInput">Import .maFile:</label>
+        <label for="fileInput">Import ".maFile":</label>
         <input type="file" id="fileInput" accept=".maFile">
         
         <label for="accountList">Select Account:</label>
@@ -17,14 +17,24 @@
 
         <div id="accountName"></div>
         
-        <div id="authCode" title="Double-click to copy">Auth Code: </div>
-        <button id="copyButton">Copy</button>
         <div id="progressBarContainer">
             <div id="progressBar"></div>
         </div>
+        <div id="authCode" title="Double-click to copy">Auth Code: </div>
+        <button id="copyButton">Copy</button>
         <div id="timeRemaining">Valid for: 30 seconds</div>
+        <button id="deleteAccountButton">Delete Account</button>
+        <button id="clearAllButton">Clear All Accounts</button>
     </div>
     <div id="toast"></div>
+
+    <footer>
+        <a href="https://github.com/unkaer/html-Steam-Authenticator" target="_blank">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Logo">
+            View on GitHub
+        </a>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>

@@ -11,8 +11,12 @@ const messages = {
         authCodeTitle: "Double-click to copy",
         validFor: "Valid for: {time} seconds",
         copyButton: "Copy",
+        deleteAccountButton: "Delete Account",
+        clearAllButton: "Clear All Accounts",
         copiedToast: "Copied to clipboard!",
-        toastSuccess: "Copied to clipboard!"
+        toastSuccess: "Copied to clipboard!",
+        deleteConfirm: "Are you sure you want to delete this account?",
+        clearAllConfirm: "Are you sure you want to clear all accounts?",
     },
     zh: {
         title: "Steam 验证器",
@@ -24,8 +28,12 @@ const messages = {
         authCodeTitle: "双击复制",
         validFor: "有效期: {time} 秒",
         copyButton: "复制",
+        deleteAccountButton: "删除账号",
+        clearAllButton: "清空所有账号",
         copiedToast: "已复制到剪贴板！",
-        toastSuccess: "已复制到剪贴板！"
+        toastSuccess: "已复制到剪贴板！",
+        deleteConfirm: "确定要删除此账号吗？",
+        clearAllConfirm: "确定要清空所有账号吗？",
     }
 };
 
@@ -36,7 +44,37 @@ function updateTextContent() {
     document.querySelector('label[for="fileInput"]').textContent = messages[lang].fileLabel;
     document.querySelector('label[for="accountList"]').textContent = messages[lang].accountLabel;
     document.getElementById('copyButton').textContent = messages[lang].copyButton;
+    document.getElementById('deleteAccountButton').textContent = messages[lang].deleteAccountButton;
+    document.getElementById('clearAllButton').textContent = messages[lang].clearAllButton;
     document.getElementById('authCode').title = messages[lang].authCodeTitle;
+}
+
+function saveAllMaFiles(accounts) {
+    localStorage.setItem('steamAuthenticatorAccounts', JSON.stringify(accounts));
+}
+
+function deleteAccount() {
+    const lang = getUserLanguage();
+    const accountList = document.getElementById('accountList');
+    const selectedAccount = accountList.value;
+
+    if (confirm(messages[lang].deleteConfirm)) {
+        let accounts = loadAllMaFiles();
+        delete accounts[selectedAccount];
+        saveAllMaFiles(accounts);
+        updateAccountList();
+        initializePage(); // 重新初始化页面
+    }
+}
+
+function clearAllAccounts() {
+    const lang = getUserLanguage();
+    
+    if (confirm(messages[lang].clearAllConfirm)) {
+        localStorage.removeItem('steamAuthenticatorAccounts');
+        updateAccountList();
+        initializePage(); // 重新初始化页面
+    }
 }
 
 function base64ToBytes(base64) {
@@ -126,12 +164,12 @@ function getUserLanguage() {
 function saveMaFile(accountName, maFile) {
     let accounts = loadAllMaFiles();
     accounts[accountName] = maFile;
-    localStorage.setItem('maFiles', JSON.stringify(accounts));
+    saveAllMaFiles(accounts);
 }
 
 function loadAllMaFiles() {
-    const maFilesJson = localStorage.getItem('maFiles');
-    return maFilesJson ? JSON.parse(maFilesJson) : {};
+    const storedAccounts = localStorage.getItem('steamAuthenticatorAccounts');
+    return storedAccounts ? JSON.parse(storedAccounts) : {};
 }
 
 function handleFileInput(event) {
@@ -144,6 +182,9 @@ function handleFileInput(event) {
                 console.log("maFile loaded:", maFile);
                 saveMaFile(maFile.account_name, maFile);
                 updateAccountList();
+                // 设置选择新导入的账号
+                const accountList = document.getElementById('accountList');
+                accountList.value = maFile.account_name;
                 displayAccountAndStartAuth(maFile.account_name);
             } catch (error) {
                 console.error("Failed to parse .maFile:", error);
@@ -154,15 +195,20 @@ function handleFileInput(event) {
 }
 
 function updateAccountList() {
-    const accounts = loadAllMaFiles();
     const accountList = document.getElementById('accountList');
     accountList.innerHTML = ''; // 清空列表
+    const accounts = loadAllMaFiles();
 
     for (const accountName in accounts) {
         const option = document.createElement('option');
         option.value = accountName;
         option.textContent = accountName;
         accountList.appendChild(option);
+    }
+
+    if (Object.keys(accounts).length === 0) {
+        document.getElementById('accountName').innerText = '';
+        document.getElementById('authCode').innerText = '';
     }
 }
 
@@ -195,5 +241,7 @@ document.getElementById('accountList').addEventListener('change', function() {
 });
 document.getElementById('authCode').addEventListener('dblclick', copyAuthCode);
 document.getElementById('copyButton').addEventListener('click', copyAuthCode);
+document.getElementById('deleteAccountButton').addEventListener('click', deleteAccount);
+document.getElementById('clearAllButton').addEventListener('click', clearAllAccounts);
 
 initializePage();
