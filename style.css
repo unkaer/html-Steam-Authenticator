@@ -1,0 +1,90 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+}
+
+#accountName {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.authCodeContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#authCode {
+    font-size: 2em;
+    margin: 20px 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+#copyButton {
+    padding: 5px 10px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #76c7c0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#copyButton:hover {
+    background-color: #5ba8a2;
+}
+
+#progressContainer {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 10px 0;
+    height: 10px;
+}
+
+#progressBar {
+    height: 100%;
+    width: 0;
+    background-color: #76c7c0;
+    transition: width 1s linear;
+}
+
+#timeRemaining {
+    font-size: 1em;
+    color: gray;
+}
+
+#toast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 1em;
+    opacity: 0;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+#toast.show {
+    visibility: visible;
+    opacity: 1;
+}
