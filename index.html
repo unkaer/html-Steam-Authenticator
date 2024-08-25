@@ -7,22 +7,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header id="header">Steam Authenticator</header>
     <div class="container">
-        <h1 id="header">Steam Authenticator</h1>
+        <label for="fileInput">Import .maFile:</label>
         <input type="file" id="fileInput" accept=".maFile">
+        
+        <label for="accountList">Select Account:</label>
+        <select id="accountList"></select>
+
         <div id="accountName"></div>
-        <div class="authCodeContainer">
-            <div id="authCode" class="copyable" title="Double-click to copy"></div>
-            <button id="copyButton"></button>
-        </div>
-        <div id="progressContainer">
+        
+        <div id="authCode" title="Double-click to copy">Auth Code: </div>
+        <button id="copyButton">Copy</button>
+        <div id="progressBarContainer">
             <div id="progressBar"></div>
         </div>
-        <div id="timeRemaining"></div>
+        <div id="timeRemaining">Valid for: 30 seconds</div>
     </div>
-
-    <div id="toast" class="toast"></div>
-
+    <div id="toast"></div>
     <script src="script.js"></script>
 </body>
 </html>
